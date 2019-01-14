@@ -98,9 +98,13 @@ drive(int index, tCarElt* car, tSituation *s)
 	float angle;
 	const float SC = 1.0;
 
+	// the initial steering angle is the difference between the tangent angle of the track and the angle of the car
 	angle = RtTrackSideTgAngleL(&(car->_trkPos)) - car->_yaw;
+
 	NORM_PI_PI(angle); // put the angle back in the range from -PI to PI
-	angle -= SC * car->_trkPos.toMiddle / car->_trkPos.seg->width;
+
+	// divide the distance to the middle of the track by the width of the track, then multiply it with a constant
+	angle -= SC * (car->_trkPos.toMiddle / car->_trkPos.seg->width);
 
 	// set up the values to return
 	car->ctrl.steer = angle / car->_steerLock;
